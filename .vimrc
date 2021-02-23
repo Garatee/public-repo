@@ -1,54 +1,56 @@
-call pathogen#infect() 
-
-"add tabs as spaces, and make them 4 spaces
-set autoindent
-set smartindent
-set smarttab
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
-set expandtab
-
-"Respect line wrapping
-nnoremap k gk
-nnoremap j gj
-nnoremap gk k
-nnoremap gj j
-
-filetype plugin on
-filetype indent on
-
 "SETUP
+set autoindent smartindent
+set softtabstop=2 tabstop=2 shiftwidth=2
+set expandtab                       "Insert space characters when tab key is pressed
+set nowrap                          "Don't wrap to next line when line out of screen
+set ignorecase smartcase            "Search case insensitive unless capitalizing
+set number                          "Line numbers
+set relativenumber                  "Relative line number
+set cursorline                      "Highlight the line the cursor is on
+set incsearch                       "incremental search
 set visualbell                      "No sounds
+set scrolloff=8                     "always keep 8 spaces at the bottom
 set autoread                        "Reload files changed outside vim
 set laststatus=2                    "Enabling statusline at all times
 if &encoding != 'utf-8'
-    set encoding=utf-8              "Necessary to show Unicode glyphs
+  set encoding=utf-8                "Necessary to show Unicode glyphs
 endif
 set noshowmode                      "Don't show the mode(airline is handling this)
+set signcolumn=yes                  "side column for linting, git
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+set ve+=onemore                     "Allow cursor to move an extra character more at the end of every line
+noremap $ $l
+filetype plugin on                  "Allow local options to override global ones
+filetype indent on                  "Allow local options to override global ones
 
-imap jj <Esc>                       " Use jj to leave insert mode
-set cursorline                      "Highlight the line the cursor is on
-set number                          "Line numbers
+""Respect line wrapping
+"nnoremap k gk
+"nnoremap j gj
+"nnoremap gk k
+"nnoremap gj j
 
 " Installs vim-plug if not already present
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 "Plugins
 call plug#begin()
+
+
 "TPOPE
-Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-sensible'           "A universal set of defaults that everyone can agree on
 Plug 'tpope/vim-fugitive'           "Allows git commands
-Plug 'tpope/vim-commentary'       "Makes commenting easier
-Plug 'tpope/vim-surround'           "Allows changing of surrounding brackets, quotes, etc
+Plug 'tpope/vim-commentary'         "Makes commenting easier: use gcc to comment out a line, gcap for a whole paragraph. In visual mode, gcc to comment out selected
+Plug 'tpope/vim-surround'           "Allows changing of surrounding brackets, quotes, etc by typing cs <prev> <next> ex. cs'`
+Plug 'ctrlpvim/ctrlp.vim'           "Use ctrl-p to switch files
 
-Plug 'ctrlpvim/ctrlp.vim'            "Use ctrl-p to switch files
-
-"Airine 
+"Airine
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -62,18 +64,32 @@ Plug 'sheerun/vim-polyglot'
 Plug 'flazz/vim-colorschemes'
 Plug 'airblade/vim-gitgutter'
 
+"Auto Pair
+Plug 'jiangmiao/auto-pairs'
+
+"Undo Tree
+Plug 'mbbill/undotree'
+
+"YouCompleteMe
+"With pyenv installed python, you will need to add this: export PYTHON_CONFIGURE_OPTS="--enable-framework"
+"run ~/.vim/plugged/YouCompleteMe/install.py --all
+"Plug 'ycm-core/YouCompleteMe'
+"let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py'
+"let g:ycm_confirm_extra_conf = 0
+
+
 call plug#end()
 
 "Setting the colorscheme
 if &t_Co >= 256 || has("gui_running")
-    set background=dark
-    if !empty(glob('~/.vim/plugged/vim-colorschemes/'))
-        colorscheme gruvbox
-    endif
+  set background=dark
+  if !empty(glob('~/.vim/plugged/vim-colorschemes/'))
+    colorscheme gruvbox
+  endif
 endif
 if &t_Co > 2 || has("gui_running")
-    "switch syntax highlighting on, when the terminal has colors
-    syntax on
+  "switch syntax highlighting on, when the terminal has colors
+  syntax on
 endif
 
 "Airline
@@ -98,11 +114,10 @@ let g:gitgutter_realtime = 1
 set updatetime=500
 
 
-
 " For NerdTree
 " autocmd vimenter * NERDTree
 set mouse=a
-let g:NERDTreeMouseMode=3 
+let g:NERDTreeMouseMode=3
 :command NE NERDTree
 
 " For regex expression when typing /
@@ -117,7 +132,7 @@ inoremap <S-Down> <Esc>:m+<CR>
 
 "Copy Clipboard Key bindings
 map <C-c> :w !pbcopy<CR><CR>
-map y : <C-c>
+"map y : <C-c>
 
 
 "Syntastic
