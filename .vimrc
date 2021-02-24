@@ -21,16 +21,12 @@ set noswapfile
 set nobackup
 set undodir=~/.vim/undodir
 set undofile
+set rtp+=/usr/local/opt/fzf
 set ve+=onemore                     "Allow cursor to move an extra character more at the end of every line
 noremap $ $l
 filetype plugin on                  "Allow local options to override global ones
 filetype indent on                  "Allow local options to override global ones
-
-""Respect line wrapping
-"nnoremap k gk
-"nnoremap j gj
-"nnoremap gk k
-"nnoremap gj j
+let g:airline_powerline_fonts = 1
 
 " Installs vim-plug if not already present
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -42,6 +38,11 @@ endif
 "Plugins
 call plug#begin()
 
+"NerdComment
+Plug 'preservim/nerdcommenter'
+
+"Syntastic
+Plug 'vim-syntastic/syntastic'
 
 "TPOPE
 Plug 'tpope/vim-sensible'           "A universal set of defaults that everyone can agree on
@@ -70,13 +71,20 @@ Plug 'jiangmiao/auto-pairs'
 "Undo Tree
 Plug 'mbbill/undotree'
 
+"Nerd Tree
+Plug 'preservim/nerdtree'
+
 "YouCompleteMe
 "With pyenv installed python, you will need to add this: export PYTHON_CONFIGURE_OPTS="--enable-framework"
-"run ~/.vim/plugged/YouCompleteMe/install.py --all
-"Plug 'ycm-core/YouCompleteMe'
-"let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py'
+"You will then need to run: ~/.vim/plugged/YouCompleteMe/install.py --all
+Plug 'ycm-core/YouCompleteMe'
+let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/.ycm_extra_conf.py'
 "let g:ycm_confirm_extra_conf = 0
 
+
+"Tree Icons
+"Always load vim-devicons as the last one
+Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
@@ -107,24 +115,28 @@ noremap <C-I> :Autoformat<CR>
 "Ctrl-p
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
-
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist|build|bin)|(\.(swp|ico|git|dSYM|svn|class|o))$'
 
 "Git Gutter
 let g:gitgutter_realtime = 1
 set updatetime=500
 
 
-" For NerdTree
-" autocmd vimenter * NERDTree
+"For NerdTree
+"autocmd vimenter * NERDTree
 set mouse=a
 let g:NERDTreeMouseMode=3
 :command NE NERDTree
 
-" For regex expression when typing /
+
+"For regex expression when typing /
 nnoremap / /\v
 vnoremap / /\v
 
-" For moving lines
+"Press ii for <Esc>
+imap ii <Esc>
+
+"For moving lines
 nnoremap <S-Up> :m-2<CR>
 nnoremap <S-Down> :m+<CR>
 inoremap <S-Up> <Esc>:m-2<CR>
@@ -132,15 +144,13 @@ inoremap <S-Down> <Esc>:m+<CR>
 
 "Copy Clipboard Key bindings
 map <C-c> :w !pbcopy<CR><CR>
-"map y : <C-c>
 
+""Syntastic
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
-"Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
