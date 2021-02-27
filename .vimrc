@@ -35,6 +35,7 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
+
 "Plugins
 call plug#begin()
 
@@ -112,38 +113,46 @@ let g:airline#extensions#ale#enabled = 1
 "AutoFormat
 noremap <C-I> :Autoformat<CR>
 
+"Exit
+"noremap <C-w> :q<CR>
+
 "Ctrl-p
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|target|dist|build|bin)|(\.(swp|ico|git|dSYM|svn|class|o))$'
-
-"Git Gutter
-let g:gitgutter_realtime = 1
-set updatetime=500
-
+let g:ctrlp_working_path_mode = 'ra'
 
 "For NerdTree
 "autocmd vimenter * NERDTree
 set mouse=a
 let g:NERDTreeMouseMode=3
-:command NE NERDTree
+let NERDTreeShowHidden=1
+let NERDTreeIgnore=['\.DS_Store$','\.vscode'] " ignore files in nerd tree
+command NE NERDTree
+function! NerdTreeToggleFind()
+    if exists("g:NERDTree") && g:NERDTree.IsOpen()
+        NERDTreeClose
+    elseif filereadable(expand('%'))
+        NERDTreeFind
+    else
+        NERDTree
+    endif
+endfunction
 
 
 "For regex expression when typing /
 nnoremap / /\v
 vnoremap / /\v
 
-"Press ii for <Esc>
-imap ii <Esc>
+"Press ff for <Esc>
+imap ff <Esc>
 
-"For moving lines
-nnoremap <S-Up> :m-2<CR>
-nnoremap <S-Down> :m+<CR>
-inoremap <S-Up> <Esc>:m-2<CR>
-inoremap <S-Down> <Esc>:m+<CR>
 
 "Copy Clipboard Key bindings
 map <C-c> :w !pbcopy<CR><CR>
+
+"Copy current path
+let @+ = expand('%:p')
 
 ""Syntastic
 "set statusline+=%#warningmsg#
